@@ -377,6 +377,39 @@ void render()
 			glPopMatrix();
 		}
 	}
+	for (int i=0; i<10; i++)
+        makeParticle(g.box[0].center.x ,g.box[0].center.y + 100 );
+
+
+    r.bot =  g.box[0].center.y - 2;
+    r.left = g.box[0].center.x + 20;
+    int difs = g.box[0].center.y - g.box[1].center.y;
+    r.center = 30;
+
+
+    ggprint8b(&r, difs, 0xffffffff, "Requirements");
+    r.bot =  g.box[1].center.y - 2;
+    r.left = g.box[1].center.x + 0;
+
+
+
+    ggprint8b(&r, difs, 0xffffffff, "Design");
+    r.bot =  g.box[2].center.y - 2;
+    r.left = g.box[2].center.x + 6;
+
+
+
+    ggprint8b(&r, difs, 0xffffffff, "Coding");
+    r.bot =  g.box[3].center.y - 2;
+    r.left = g.box[3].center.x + 2;
+
+    ggprint8b(&r, difs, 0xffffffff, "Testing");
+    r.bot =  g.box[4].center.y - 2;
+    r.left = g.box[4].center.x + 6;
+
+    ggprint8b(&r, difs,  0xffffffff, "Maintenance");
+
+	
 }
 
 
