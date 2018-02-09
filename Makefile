@@ -3,8 +3,8 @@
 
 all: lab1
 
-lab1: lab1.cpp
-	g++ lab1.cpp -Wall -olab1 -lX11 -lGL -lGLU -lm
+lab1: lab1.cpp 
+	g++ lab1.cpp libggfonts.a log.h -Wall -olab1 -lrt -pthread -lX11 -lGL -lGLU -lm  
 
 clean:
 	rm -f lab1
