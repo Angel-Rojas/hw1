@@ -195,6 +195,11 @@ void init_opengl(void)
 	glOrtho(0, g.xres, 0, g.yres, -1, 1);
 	//Set the screen background color
 	glClearColor(0.1, 0.1, 0.1, 1.0);
+	 glEnable(GL_TEXTURE_2D);
+    initialize_fonts();
+    glClear(GL_COLOR_BUFFER_BIT);
+
+
 }
 
 void makeParticle(int x, int y)
