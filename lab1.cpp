@@ -43,6 +43,9 @@ using namespace std;
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <GL/glx.h>
+//#include "log.h"
+#include "fonts.h"
+
 
 const int MAX_PARTICLES = 1000;
 const float GRAVITY = 0.1;
@@ -80,7 +83,7 @@ public:
 		// Begin drawing CIRCLE here
 		Shape *b = &circle;
 		b->width = 100; // circle raduii
-		b->center.x = xres - 110;
+		b->center.x = xres - 130;
 		b->center.y = 0;
 		for (int i=0; i<5; i++) {
 			b = &box[nbox];
@@ -195,9 +198,10 @@ void init_opengl(void)
 	glOrtho(0, g.xres, 0, g.yres, -1, 1);
 	//Set the screen background color
 	glClearColor(0.1, 0.1, 0.1, 1.0);
-	 glEnable(GL_TEXTURE_2D);
-    initialize_fonts();
-    glClear(GL_COLOR_BUFFER_BIT);
+	// enable text with the following
+	glEnable(GL_TEXTURE_2D);
+    	initialize_fonts();
+    	//glClear(GL_COLOR_BUFFER_BIT);
 
 
 }
@@ -297,7 +301,9 @@ void movement()
 		x = p->s.center.x - s->center.x;
 		y = p->s.center.y - s->center.y;
 		float dist = sqrt(x*x + y*y);
-		if (dist < s->width) {
+		
+		if (dist < s->width) 
+		{
 		// p->s.center.x -= dist;
 		// p->s.center.y -= dist;
 				p->velocity.y = -(p->velocity.y);
@@ -306,7 +312,12 @@ void movement()
 				p->velocity.y *= 0.1;
 		}
 
-
+		if (p->s.center.y < 0.0) 
+			{
+				// //cout << "off screen" << endl;
+				g.particle[i] = g.particle[g.nparticle-1];
+				--g.nparticle;
+			}
 		//check for collision with shapes...
 		
 		for (int i=0; i<g.nbox; i++) {
@@ -316,15 +327,17 @@ void movement()
 			float w = s->width;
 			float h = s->height;
 			// //cout << p->s.center.y << endl;
-			if (p->s.center.y > y-h && p->s.center.y < y+h && p->s.center.x < x+w && p->s.center.x > x-w) {
+			if (p->s.center.y > y-h && p->s.center.y < y+h && p->s.center.x < x+w && p->s.center.x > x-w) 
+			{
 				p->velocity.y = -(p->velocity.y);
 				p->velocity.y *= 0.6;
 			}
-			if (p->s.center.y < 0.0) {
+			/*if (p->s.center.y < 0.0) 
+			{
 				// //cout << "off screen" << endl;
 				g.particle[i] = g.particle[g.nparticle-1];
 				--g.nparticle;
-			}
+			}*/
 		}
 	}
 
@@ -383,36 +396,37 @@ void render()
 		}
 	}
 	for (int i=0; i<10; i++)
-        makeParticle(g.box[0].center.x ,g.box[0].center.y + 100 );
+        	makeParticle(g.box[0].center.x ,g.box[0].center.y + 100 );
+
+	
+	Rect r;
+    	r.bot =  g.box[0].center.y - 2;
+    	r.left = g.box[0].center.x + 20;
+    	r.center = 30;
+    	int difs = g.box[0].center.y - g.box[1].center.y;
 
 
-    r.bot =  g.box[0].center.y - 2;
-    r.left = g.box[0].center.x + 20;
-    int difs = g.box[0].center.y - g.box[1].center.y;
-    r.center = 30;
-
-
-    ggprint8b(&r, difs, 0xffffffff, "Requirements");
-    r.bot =  g.box[1].center.y - 2;
-    r.left = g.box[1].center.x + 0;
-
-
-
-    ggprint8b(&r, difs, 0xffffffff, "Design");
-    r.bot =  g.box[2].center.y - 2;
-    r.left = g.box[2].center.x + 6;
+    	ggprint8b(&r, difs, 0xffffffff, "Requirements");
+    	r.bot =  g.box[1].center.y - 2;
+    	r.left = g.box[1].center.x + 0;
 
 
 
-    ggprint8b(&r, difs, 0xffffffff, "Coding");
-    r.bot =  g.box[3].center.y - 2;
-    r.left = g.box[3].center.x + 2;
+    	ggprint8b(&r, difs, 0xffffffff, "Design");
+    	r.bot =  g.box[2].center.y - 2;
+    	r.left = g.box[2].center.x + 6;
 
-    ggprint8b(&r, difs, 0xffffffff, "Testing");
-    r.bot =  g.box[4].center.y - 2;
-    r.left = g.box[4].center.x + 6;
 
-    ggprint8b(&r, difs,  0xffffffff, "Maintenance");
+
+    	ggprint8b(&r, difs, 0xffffffff, "Coding");
+    	r.bot =  g.box[3].center.y - 2;
+    	r.left = g.box[3].center.x + 2;
+
+    	ggprint8b(&r, difs, 0xffffffff, "Testing");
+    	r.bot =  g.box[4].center.y - 2;
+    	r.left = g.box[4].center.x + 6;
+
+    	ggprint8b(&r, difs,  0xffffffff, "Maintenance");
 
 	
 }
