@@ -47,7 +47,7 @@ using namespace std;
 #include "fonts.h"
 
 
-const int MAX_PARTICLES = 1000;
+const int MAX_PARTICLES = 100000;
 const float GRAVITY = 0.1;
 
 //some structures
@@ -83,7 +83,7 @@ public:
 		// Begin drawing CIRCLE here
 		Shape *b = &circle;
 		b->width = 100; // circle raduii
-		b->center.x = xres - 130;
+		b->center.x = xres - 100;
 		b->center.y = 0;
 		for (int i=0; i<5; i++) {
 			b = &box[nbox];
@@ -215,8 +215,8 @@ void makeParticle(int x, int y)
 	Particle *p = &g.particle[g.nparticle];
 	p->s.center.x = x;
 	p->s.center.y = y;
-	p->velocity.y = (float)rand()/(float)RAND_MAX * 1.0 -0.5;
-	p->velocity.x = (float)rand()/(float)RAND_MAX * 1.0 -0.5;
+	p->velocity.y = (float)rand()/(float)RAND_MAX * 2.0 -0.1;
+	p->velocity.x = (float)rand()/(float)RAND_MAX * 2.0;
 	++g.nparticle;
 }
 
@@ -250,10 +250,6 @@ void check_mouse(XEvent *e)
 		if (savex != e->xbutton.x || savey != e->xbutton.y) {
 			savex = e->xbutton.x;
 			savey = e->xbutton.y;
-
-			int y = g.yres - e->xbutton.y;
-			for (int i=0; i<25; i++)
-				makeParticle(e->xbutton.x, y);
 
 
 		}
@@ -295,7 +291,7 @@ void movement()
 		p->velocity.y -= GRAVITY;
 
 		Shape *s;
-		//check with the cirlce
+		//check COLLISION with the cirlce
 		s = &g.circle;
 		float x=0, y=0;
 		x = p->s.center.x - s->center.x;
@@ -312,6 +308,7 @@ void movement()
 				p->velocity.y *= 0.1;
 		}
 
+		// this is for the particle leaving the screen
 		if (p->s.center.y < 0.0) 
 			{
 				// //cout << "off screen" << endl;
@@ -323,14 +320,14 @@ void movement()
 		for (int i=0; i<g.nbox; i++) {
 			s= &g.box[i];
 			float x = s->center.x;
-			float y = s->center.y;
+			float y = s->center.y + 3;
 			float w = s->width;
 			float h = s->height;
 			// //cout << p->s.center.y << endl;
 			if (p->s.center.y > y-h && p->s.center.y < y+h && p->s.center.x < x+w && p->s.center.x > x-w) 
 			{
 				p->velocity.y = -(p->velocity.y);
-				p->velocity.y *= 0.6;
+				p->velocity.y *= 0.4;
 			}
 			/*if (p->s.center.y < 0.0) 
 			{
