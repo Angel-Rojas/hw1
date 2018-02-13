@@ -69,13 +69,14 @@ struct Particle {
 
 class Global {
 public:
-	int xres, yres;
+	int xres, yres, xmoved;
 	Shape box[MAX_PARTICLES];
 	Particle particle[MAX_PARTICLES];
 	int nparticle;
 	int nbox;
 	Shape circle;
 	Global() {
+	    	//xmoved = 800;
 		xres = 800;
 		yres = 600;
 		//define a box shape
@@ -83,8 +84,8 @@ public:
 		// Begin drawing CIRCLE here
 		Shape *b = &circle;
 		b->width = 100; // circle raduii
-		b->center.x = xres - 100;
-		b->center.y = 0;
+		b->center.x = xres - 165;
+		b->center.y = -20;
 		for (int i=0; i<5; i++) {
 			b = &box[nbox];
 			b->width = 100;
@@ -215,7 +216,7 @@ void makeParticle(int x, int y)
 	Particle *p = &g.particle[g.nparticle];
 	p->s.center.x = x;
 	p->s.center.y = y;
-	p->velocity.y = (float)rand()/(float)RAND_MAX * 2.0 -0.1;
+	p->velocity.y = (float)rand()/(float)RAND_MAX * 2.0 - 0.5;
 	p->velocity.x = (float)rand()/(float)RAND_MAX * 2.0;
 	++g.nparticle;
 }
@@ -294,8 +295,8 @@ void movement()
 		//check COLLISION with the cirlce
 		s = &g.circle;
 		float x=0, y=0;
-		x = p->s.center.x - s->center.x;
-		y = p->s.center.y - s->center.y;
+		x = p->s.center.x - s->center.x + 5;
+		y = p->s.center.y - s->center.y - 5;
 		float dist = sqrt(x*x + y*y);
 		
 		if (dist < s->width) 
@@ -304,7 +305,7 @@ void movement()
 		// p->s.center.y -= dist;
 				p->velocity.y = -(p->velocity.y);
 				//p->velocity.x = -(p->velocity.x);
-				p->velocity.x -= 0.01;
+				p->velocity.x -= 0.00;
 				p->velocity.y *= 0.1;
 		}
 
@@ -320,7 +321,7 @@ void movement()
 		for (int i=0; i<g.nbox; i++) {
 			s= &g.box[i];
 			float x = s->center.x;
-			float y = s->center.y + 3;
+			float y = s->center.y + 4;
 			float w = s->width;
 			float h = s->height;
 			// //cout << p->s.center.y << endl;
@@ -393,7 +394,7 @@ void render()
 		}
 	}
 	for (int i=0; i<10; i++)
-        	makeParticle(g.box[0].center.x ,g.box[0].center.y + 100 );
+        	makeParticle(g.box[0].center.x-70 ,g.box[0].center.y + 100 );
 
 	
 	Rect r;
